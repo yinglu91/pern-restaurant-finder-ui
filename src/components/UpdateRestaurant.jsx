@@ -1,10 +1,10 @@
-import React, {useState, useEffect} from 'react';
-import {useParams} from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import RestaurantFinder from '../apis/RestaurantFinder';
 import { useHistory } from 'react-router-dom';
 
 const UpdateRestaurant = () => {
-  const {id} = useParams();
+  const { id } = useParams();
   let history = useHistory();
 
   const [name, setName] = useState('');
@@ -15,11 +15,11 @@ const UpdateRestaurant = () => {
     const fetchData = async () => {
       try {
         const response = await RestaurantFinder.get(`/${id}`);
-        const restaurant = response.data;
-  
-        setName(restaurant.name)
-        setLocation(restaurant.location)
-        setPriceRange(restaurant.price_range) 
+        const restaurant = response.data.data.restaurant;
+
+        setName(restaurant.name);
+        setLocation(restaurant.location);
+        setPriceRange(restaurant.price_range);
       } catch (err) {
         console.log(err.message);
       }
@@ -33,21 +33,23 @@ const UpdateRestaurant = () => {
 
     try {
       const updateRestaurant = await RestaurantFinder.put(`/${id}`, {
-        name, location, price_range: priceRange
+        name,
+        location,
+        price_range: priceRange,
       });
 
-      history.push('/')
+      history.push('/');
     } catch (err) {
       console.log(err.message);
     }
-  }
+  };
   return (
     <div className="mb-4">
-    <form>
-      <div className="form-group">
-        <label htmlFor="name">Name</label>
+      <form>
+        <div className="form-group">
+          <label htmlFor="name">Name</label>
           <input
-          id="name"
+            id="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
             type="text"
@@ -57,9 +59,9 @@ const UpdateRestaurant = () => {
         </div>
 
         <div className="form-group">
-        <label htmlFor="location">Location</label>
+          <label htmlFor="location">Location</label>
           <input
-          id="name"
+            id="name"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             type="text"
@@ -69,8 +71,8 @@ const UpdateRestaurant = () => {
         </div>
 
         <div className="form-group">
-        <label htmlFor="priceRange">Price Range</label>
-        <select
+          <label htmlFor="priceRange">Price Range</label>
+          <select
             value={priceRange}
             onChange={(e) => setPriceRange(e.target.value)}
             className="custom-select my-1 mr-sm-2"
@@ -92,10 +94,9 @@ const UpdateRestaurant = () => {
         >
           Submit
         </button>
-      
-    </form>
-  </div>
-    );
+      </form>
+    </div>
+  );
 };
 
 export default UpdateRestaurant;
